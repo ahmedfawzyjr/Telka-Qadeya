@@ -74,8 +74,8 @@ body {
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-.font-tajawal {
-  font-family: var(--font-tajawal), ui-sans-serif, system-ui, sans-serif;
+.font-cairo {
+  font-family: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ===== Animations ===== */
