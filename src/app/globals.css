@@ -1,26 +1,340 @@
 @import "tailwindcss";
 
+/* ===== Custom Properties ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Palestinian Flag Colors */
+  --color-black: #1a1a1a;
+  --color-white: #ffffff;
+  --color-green: #009639;
+  --color-red: #EE2A35;
+  --color-olive: #3d5a3d;
+  --color-gold: #c9a227;
+
+  /* Light Theme */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --border: 0 0% 89.8%;
+  --ring: 142 76% 36%;
+
+  /* Spacing & Sizing */
+  --radius: 0.75rem;
+  --timeline-width: 4px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --background: 0 0% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 98%;
+  --muted: 0 0% 14.9%;
+  --muted-foreground: 0 0% 63.9%;
+  --border: 0 0% 14.9%;
+  --ring: 142 76% 36%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ===== Base Styles ===== */
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-green);
+  border-radius: 999px;
+}
+
+::selection {
+  background: var(--color-green);
+  color: white;
+}
+
+/* ===== Font Families ===== */
+.font-inter {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-tajawal {
+  font-family: var(--font-tajawal), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ===== Animations ===== */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(0, 150, 57, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(0, 150, 57, 0.6);
+  }
+}
+
+@keyframes pulse-red {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(238, 42, 53, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(238, 42, 53, 0.6);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-red {
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease forwards;
+}
+
+/* ===== Gradient Text ===== */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-green), var(--color-red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-green {
+  background: linear-gradient(135deg, var(--color-green), var(--color-olive));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Glass Effect ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Hero Pattern ===== */
+.hero-pattern {
+  background-image:
+    repeating-linear-gradient(45deg,
+      transparent,
+      transparent 50px,
+      rgba(0, 150, 57, 0.03) 50px,
+      rgba(0, 150, 57, 0.03) 100px);
+}
+
+/* ===== Palestinian Flag Loader ===== */
+.flag-loader {
+  width: 120px;
+  height: 80px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.flag-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+      var(--color-black) 33.33%,
+      var(--color-white) 33.33% 66.66%,
+      var(--color-green) 66.66%);
+}
+
+.flag-loader::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+  border-right: 50px solid var(--color-red);
+}
+
+[dir="ltr"] .flag-loader::after {
+  right: auto;
+  left: 0;
+  border-right: none;
+  border-left: 50px solid var(--color-red);
+}
+
+/* ===== Timeline Styles ===== */
+.timeline-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--timeline-width);
+  background: linear-gradient(to bottom,
+      transparent 0%,
+      var(--color-green) 5%,
+      var(--color-green) 95%,
+      transparent 100%);
+}
+
+[dir="rtl"] .timeline-line {
+  right: 50%;
+  transform: translateX(50%);
+}
+
+[dir="ltr"] .timeline-line {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ===== Cards ===== */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 30px rgba(0, 150, 57, 0.2);
+  border-color: rgba(0, 150, 57, 0.3);
+}
+
+/* ===== Three.js Canvas Container ===== */
+.canvas-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ===== Button Styles ===== */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-green), var(--color-olive));
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 20px rgba(0, 150, 57, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ===== Stats Counter Animation ===== */
+.stat-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Responsive Utilities ===== */
+@media (max-width: 768px) {
+  .timeline-line {
+    display: none;
+  }
+}
+
+/* ===== Loading Screen ===== */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--background));
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ===== Section Dividers ===== */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-green), transparent);
 }

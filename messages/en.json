@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "title": "The Cause | Palestinian History",
+    "description": "An interactive journey through Palestinian struggle"
+  },
+  "hero": {
+    "title1": "The",
+    "title2": "Cause",
+    "subtitle": "A Journey Through Palestinian Struggle",
+    "description": "From the Balfour Declaration of 1917 to today, the story of a people who refuse to be forgotten",
+    "scrollCTA": "Explore the Story",
+    "stats": {
+      "years": "Years of Occupation",
+      "refugees": "Palestinian Refugees",
+      "villages": "Villages Destroyed"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "timeline": "Timeline",
+    "statistics": "Statistics",
+    "pillars": "Pillars of Nakba"
+  },
+  "sections": {
+    "timeline": {
+      "title": "Timeline",
+      "subtitle": "Events That Shaped Palestine's History"
+    },
+    "statistics": {
+      "title": "Numbers That Haunt",
+      "subtitle": "Statistics That Tell the Tragedy"
+    },
+    "pillars": {
+      "title": "Four Pillars of the Nakba",
+      "subtitle": "Ongoing Mechanisms of Displacement"
+    }
+  },
+  "footer": {
+    "quote": "We will never forget, never forgive, and we will return",
+    "dedication": "This site is dedicated to every Palestinian martyr and every refugee awaiting return",
+    "slogan": "Never Forget. Never Forgive. We Will Return."
+  },
+  "theme": {
+    "dark": "Dark Mode",
+    "light": "Light Mode",
+    "system": "System"
+  },
+  "language": {
+    "ar": "العربية",
+    "en": "English"
+  },
+  "ongoing": "Ongoing"
+}
