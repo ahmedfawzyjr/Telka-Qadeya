@@ -2,10 +2,16 @@
 
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
+import { toArabicNumerals } from '@/lib/utils';
 
 export function Footer() {
     const t = useTranslations('footer');
     const locale = useLocale();
+    const isArabic = locale === 'ar';
+
+    // Get year in Arabic or English
+    const year = new Date().getFullYear();
+    const displayYear = isArabic ? toArabicNumerals(year) : year;
 
     return (
         <footer className="py-16 lg:py-24 bg-muted/30 relative">
@@ -60,10 +66,13 @@ export function Footer() {
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 }}
                 >
-                    <p>{locale === 'ar' ? 'تلك القضية' : 'The Cause'} © {new Date().getFullYear()}</p>
+                    <p>
+                        🇵🇸 {isArabic ? 'تلك القضية' : 'The Cause'} © {displayYear} 🇵🇸
+                    </p>
                     <p className="font-medium">{t('slogan')}</p>
                 </motion.div>
             </div>
         </footer>
     );
 }
+
