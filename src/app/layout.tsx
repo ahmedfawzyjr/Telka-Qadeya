@@ -56,7 +56,7 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${cairo.variable}`}
     >
-      <body className={`antialiased ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+      <body className={`antialiased ${isRTL ? 'font-cairo' : 'font-inter'}`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <Providers>
             {children}
