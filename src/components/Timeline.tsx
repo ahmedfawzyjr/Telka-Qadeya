@@ -5,13 +5,26 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { timelineEvents, TimelineEvent } from '@/lib/data';
+import { toArabicNumerals } from '@/lib/utils';
+import { useScrollProgress } from './ScrollProgressProvider';
 
 function TimelineEventCard({ event, index }: { event: TimelineEvent; index: number }) {
     const locale = useLocale() as 'ar' | 'en';
+    const isArabic = locale === 'ar';
     const t = useTranslations();
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
     const isEven = index % 2 === 0;
+    const { bloodLevel } = useScrollProgress();
+
+    // Format with Arabic numerals
+    const formatNumber = (val: string) => isArabic ? toArabicNumerals(val) : val;
+    const formatYear = (year: number) => isArabic ? toArabicNumerals(year) : year;
+
+    // Card gets more red/bloody as you scroll
+    const cardBorderColor = event.featured
+        ? `rgba(238, 42, 53, ${0.3 + bloodLevel * 0.5})`
+        : `rgba(0, 150, 57, ${0.3 - bloodLevel * 0.2})`;
 
     return (
         <motion.article
@@ -31,12 +44,12 @@ function TimelineEventCard({ event, index }: { event: TimelineEvent; index: numb
                 className={`
           order-2 lg:order-${isEven ? '1' : '3'}
           p-6 rounded-2xl glass card-hover
-          ${event.featured ? 'border-palestinian-red/30' : ''}
           ${event.ongoing ? 'animate-pulse-red' : ''}
         `}
+                style={{ borderColor: cardBorderColor, borderWidth: event.featured ? 2 : 1 }}
                 whileHover={{ scale: 1.02 }}
             >
-                <div className={`${locale === 'ar' ? 'text-right' : 'text-left'}`}>
+                <div className={`${isArabic ? 'text-right' : 'text-left'}`}>
                     {/* Date badge */}
                     <span className={`
             inline-block px-3 py-1 rounded-full text-sm font-medium mb-3
@@ -44,13 +57,13 @@ function TimelineEventCard({ event, index }: { event: TimelineEvent; index: numb
                             ? 'bg-palestinian-red/20 text-palestinian-red'
                             : 'bg-palestinian-green/20 text-palestinian-green'}
           `}>
-                        {event.date}
+                        {isArabic ? toArabicNumerals(event.date) : event.date}
                         {event.ongoing && ` - ${t('ongoing')}`}
                     </span>
 
                     {/* Year watermark */}
                     <div className="text-5xl lg:text-6xl font-bold text-foreground/10 mb-2">
-                        {event.year}
+                        {formatYear(event.year)}
                     </div>
 
                     {/* Title */}
@@ -78,7 +91,7 @@ function TimelineEventCard({ event, index }: { event: TimelineEvent; index: numb
                 text-3xl font-bold stat-value
                 ${event.featured ? 'text-palestinian-red' : 'text-palestinian-green'}
               `}>
-                                {event.stats.value}
+                                {formatNumber(event.stats.value)}
                             </span>
                             <span className="text-muted-foreground">
                                 {event.stats.label[locale]}

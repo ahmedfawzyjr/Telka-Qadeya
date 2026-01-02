@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
+import { toArabicNumerals } from '@/lib/utils';
 
 // Dynamic import for Three.js to avoid SSR issues
 const HeroScene = dynamic(
@@ -13,10 +14,14 @@ const HeroScene = dynamic(
 export function Hero() {
     const t = useTranslations('hero');
     const locale = useLocale();
+    const isArabic = locale === 'ar';
 
     const scrollToTimeline = () => {
         document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth' });
     };
+
+    // Format stats with Arabic numerals when in Arabic
+    const formatNumber = (num: string) => isArabic ? toArabicNumerals(num) : num;
 
     return (
         <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -84,17 +89,23 @@ export function Hero() {
                     transition={{ duration: 0.6, delay: 1.1 }}
                 >
                     <div className="text-center">
-                        <span className="block text-4xl md:text-5xl font-bold text-palestinian-green">75+</span>
+                        <span className="block text-4xl md:text-5xl font-bold text-palestinian-green">
+                            {formatNumber('75')}+
+                        </span>
                         <span className="text-sm text-muted-foreground">{t('stats.years')}</span>
                     </div>
                     <div className="hidden sm:block w-px h-12 bg-border" />
                     <div className="text-center">
-                        <span className="block text-4xl md:text-5xl font-bold text-palestinian-green">5.9M</span>
+                        <span className="block text-4xl md:text-5xl font-bold text-palestinian-green">
+                            {formatNumber('5.9')}{isArabic ? ' مليون' : 'M'}
+                        </span>
                         <span className="text-sm text-muted-foreground">{t('stats.refugees')}</span>
                     </div>
                     <div className="hidden sm:block w-px h-12 bg-border" />
                     <div className="text-center">
-                        <span className="block text-4xl md:text-5xl font-bold text-palestinian-green">531</span>
+                        <span className="block text-4xl md:text-5xl font-bold text-palestinian-green">
+                            {formatNumber('531')}
+                        </span>
                         <span className="text-sm text-muted-foreground">{t('stats.villages')}</span>
                     </div>
                 </motion.div>

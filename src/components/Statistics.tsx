@@ -4,15 +4,16 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { overallStats, Stat } from '@/lib/data';
+import { toArabicNumerals } from '@/lib/utils';
+import { useScrollProgress } from './ScrollProgressProvider';
 
-function AnimatedCounter({ value, duration = 2 }: { value: string; duration?: number }) {
+function AnimatedCounter({ value, duration = 2, isArabic }: { value: string; duration?: number; isArabic: boolean }) {
     const [count, setCount] = useState(0);
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
 
     // Extract numeric value
     const numericValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
-    const suffix = value.replace(/[0-9,]/g, '');
     const hasPlus = value.includes('+');
     const hasM = value.includes('M');
 
@@ -40,33 +41,49 @@ function AnimatedCounter({ value, duration = 2 }: { value: string; duration?: nu
     }, [isInView, numericValue, duration]);
 
     const formatNumber = (num: number) => {
-        if (hasM) return `${(num / 1000000).toFixed(1)}M`;
-        return num.toLocaleString();
+        let result: string;
+        if (hasM) {
+            result = `${(num / 1000000).toFixed(1)}`;
+            if (isArabic) {
+                result = toArabicNumerals(result) + ' مليون';
+            } else {
+                result += 'M';
+            }
+        } else {
+            result = isArabic ? toArabicNumerals(num.toLocaleString()) : num.toLocaleString();
+        }
+        return result;
     };
 
     return (
         <span ref={ref} className="stat-value">
-            {formatNumber(count)}{hasPlus ? '+' : ''}{!hasM && suffix}
+            {formatNumber(count)}{hasPlus && '+'}
         </span>
     );
 }
 
 function StatCard({ stat, index }: { stat: Stat; index: number }) {
     const locale = useLocale() as 'ar' | 'en';
+    const isArabic = locale === 'ar';
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
+    const { bloodLevel } = useScrollProgress();
+
+    // Cards get slightly more red as you scroll
+    const shadowColor = `rgba(139, 0, 0, ${bloodLevel * 0.3})`;
 
     return (
         <motion.div
             ref={ref}
             className="p-6 lg:p-8 rounded-2xl glass card-hover text-center"
+            style={{ boxShadow: `0 0 30px ${shadowColor}` }}
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
         >
             <div className="text-4xl mb-4">{stat.icon}</div>
             <div className="text-3xl lg:text-4xl font-bold text-palestinian-green mb-2">
-                <AnimatedCounter value={stat.value} />
+                <AnimatedCounter value={stat.value} isArabic={isArabic} />
             </div>
             <div className="text-muted-foreground">
                 {stat.label[locale]}
@@ -77,9 +94,20 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
 
 export function Statistics() {
     const t = useTranslations('sections.statistics');
+    const { bloodLevel } = useScrollProgress();
 
     return (
-        <section id="statistics" className="py-24 lg:py-32 bg-muted/30 relative">
+        <section
+            id="statistics"
+            className="py-24 lg:py-32 relative"
+            style={{
+                background: `linear-gradient(to bottom, 
+          hsl(var(--muted) / 0.3), 
+          hsl(var(--muted) / 0.3) 50%, 
+          rgba(139, 0, 0, ${bloodLevel * 0.1}) 100%
+        )`
+            }}
+        >
             {/* Top divider */}
             <div className="section-divider absolute top-0 inset-x-0" />
 

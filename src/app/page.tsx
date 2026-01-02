@@ -5,12 +5,15 @@ import { Pillars } from '@/components/Pillars';
 import { Footer } from '@/components/Footer';
 import { Navigation } from '@/components/ui/Navigation';
 import { Loader } from '@/components/Loader';
+import { ScrollProgressProvider } from '@/components/ScrollProgressProvider';
+import { BloodOverlay } from '@/components/BloodOverlay';
 
 export default function Home() {
   return (
-    <>
+    <ScrollProgressProvider>
       <Loader />
       <Navigation />
+      <BloodOverlay />
       <main>
         <Hero />
         <Timeline />
@@ -18,6 +21,6 @@ export default function Home() {
         <Pillars />
       </main>
       <Footer />
-    </>
+    </ScrollProgressProvider>
   );
 }
